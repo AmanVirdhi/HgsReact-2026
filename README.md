@@ -1,46 +1,212 @@
-# Getting Started with Create React App
+# ?? Hostel Grievance System (HGS)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack web application for managing hostel complaints and grievances with role-based access control.
 
-## Available Scripts
+## ? Features
 
-In the project directory, you can run:
+- ?? User Authentication (Login, Signup, Password Reset)
+- ?? Role-Based Access (Admin & User)
+- ?? Create, View, Edit, Delete Grievances
+- ?? Responsive Design
+- ?? Modern UI with Material UI
 
-### `npm start`
+## ??? Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Frontend
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+| Technology | Version |
+|------------|---------|
+| React | ^18.2.0 |
+| TypeScript | ^5.3.0 |
+| Vite | ^5.0.0 |
+| React Router DOM | ^6.20.0 |
+| Material UI | ^5.14.20 |
+| Emotion | ^11.11.1 |
+| Axios | ^1.6.0 |
+| Sass | ^1.69.0 |
 
-### `npm test`
+### Backend
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **.NET 10** - Web API
+- **Neon** - Serverless PostgreSQL Database
 
-### `npm run build`
+### Deployment
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Platform | Purpose |
+|----------|---------|
+| Vercel | Frontend Hosting |
+| Azure | Backend Hosting |
+| Neon | Serverless PostgreSQL Database |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## ??? Architecture
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
++-----------------------------------------------------------------+
+¦                         CLIENT (Vercel)                         ¦
+¦                    React + Vite + TypeScript                    ¦
++-----------------------------------------------------------------¦
+¦  Components: Login | Home | HgsTypes | GrievanceList | Edit     ¦
+¦  Services: userService | typesService                           ¦
+¦  Guards: ProtectedRoute | Hooks: useAuth                        ¦
++-----------------------------------------------------------------+
+                                ¦ HTTP (Axios)
+                                ?
++-----------------------------------------------------------------+
+¦                        SERVER (Azure)                           ¦
+¦                      .NET 10 Web API                            ¦
++-----------------------------------------------------------------¦
+¦  Controllers: UserController | HgsInfoController                ¦
+¦  Endpoints: /api/User | /api/HgsInfo                            ¦
++-----------------------------------------------------------------+
+                                ¦ Entity Framework
+                                ?
++-----------------------------------------------------------------+
+¦                       DATABASE (Neon)                           ¦
+¦                    Serverless PostgreSQL                        ¦
++-----------------------------------------------------------------+
+```
 
-### `npm run eject`
+## ?? Project Structure
 
-**Note: this is a one-way operation. Once you `eject`, you canâ€™t go back!**
+```
+src/
++-- components/
+¦   +-- Header/Header.tsx        # Navigation bar
+¦   +-- Login/Login.tsx          # Auth page (Login/Signup)
+¦   +-- Home/Home.tsx            # Dashboard
+¦   +-- HgsTypes/HgsTypes.tsx    # Create grievance form
+¦   +-- GrievanceList/GrievanceList.tsx  # List all grievances
+¦   +-- Edit/Edit.tsx            # Edit grievance form
++-- guards/
+¦   +-- ProtectedRoute.tsx       # Route protection HOC
++-- hooks/
+¦   +-- useAuth.ts               # Authentication hook
++-- models/
+¦   +-- types.ts                 # TypeScript interfaces
++-- services/
+    +-- userService.ts           # User API calls
+    +-- typesService.ts          # Grievance API calls
+```
 
-If you arenâ€™t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## ?? Pages
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point youâ€™re on your own.
+| Page | Route | Description |
+|------|-------|-------------|
+| Login | `/` | Login, Signup, Forgot Password |
+| Home | `/home` | Dashboard with system overview |
+| Create Grievance | `/types` | Form to submit new grievance |
+| Grievance List | `/grievanceList` | View all grievances (role-based) |
+| Edit Grievance | `/updateList/:id` | Update existing grievance |
 
-You donâ€™t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldnâ€™t feel obligated to use this feature. However we understand that this tool wouldnâ€™t be useful if you couldnâ€™t customize it when you are ready for it.
+## ?? Roles & Permissions
 
-## Learn More
+| Role | Email Domain | Permissions |
+|------|--------------|-------------|
+| **Admin** | `*@hgs.com` | View/Edit/Delete ALL grievances |
+| **User** | Any other domain | View/Edit/Delete ONLY own grievances |
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```typescript
+// Role determination logic
+const getRole = (email: string): UserRole => {
+  return email.toLowerCase().endsWith('@hgs.com') ? 'admin' : 'user';
+};
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## ?? API Endpoints
+
+### User Service
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/User` | Register new user |
+| GET | `/api/User` | Authenticate user |
+| PUT | `/api/User/:id` | Reset password |
+
+### Grievance Service
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/HgsInfo` | Create grievance |
+| GET | `/api/HgsInfo` | List all grievances |
+| GET | `/api/HgsInfo/:id` | Get single grievance |
+| PUT | `/api/HgsInfo/:id` | Update grievance |
+| DELETE | `/api/HgsInfo/:id` | Delete grievance |
+
+## ?? Data Models
+
+```typescript
+interface HgsTypes {
+  id: string;
+  name: string;
+  grievancetypes: string;
+  room: number;
+  course: string;
+  mobile: number;
+  description: string;
+  userEmail?: string;
+  status?: 'pending' | 'in-progress' | 'resolved';
+}
+
+interface User {
+  token: string;
+  username?: string;
+  email?: string;
+  role?: 'admin' | 'user';
+}
+```
+
+## ?? Getting Started
+
+### Prerequisites
+
+- Node.js (v18+)
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone repository
+git clone <repository-url>
+cd hgs-react
+
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## ?? Available Scripts
+
+| Script | Command | Description |
+|--------|---------|-------------|
+| `start` | `vite` | Start dev server on port 3000 |
+| `dev` | `vite` | Start dev server |
+| `build` | `tsc && vite build` | Build for production |
+| `preview` | `vite preview` | Preview production build |
+
+## ?? Deployment
+
+### Frontend (Vercel)
+
+The app is configured for Vercel deployment with SPA routing.
+
+### Backend (Azure)
+
+- Deployed as Azure App Service
+- .NET 10 Web API
+
+### Database (Neon)
+
+- Serverless PostgreSQL
+- Auto-scaling enabled
+
+---
+
+**Built with ?? using React, TypeScript & Vite**
