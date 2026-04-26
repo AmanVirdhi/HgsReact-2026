@@ -42,27 +42,27 @@ A full-stack web application for managing hostel complaints and grievances with 
 
 ```
 +-----------------------------------------------------------------+
-¦                         CLIENT (Vercel)                         ¦
-¦                    React + Vite + TypeScript                    ¦
-+-----------------------------------------------------------------¦
-¦  Components: Login | Home | HgsTypes | GrievanceList | Edit     ¦
-¦  Services: userService | typesService                           ¦
-¦  Guards: ProtectedRoute | Hooks: useAuth                        ¦
+ï¿½                         CLIENT (Vercel)                         ï¿½
+ï¿½                    React + Vite + TypeScript                    ï¿½
++-----------------------------------------------------------------ï¿½
+ï¿½  Components: Login | Home | HgsTypes | GrievanceList | Edit     ï¿½
+ï¿½  Services: userService | typesService                           ï¿½
+ï¿½  Guards: ProtectedRoute | Hooks: useAuth                        ï¿½
 +-----------------------------------------------------------------+
-                                ¦ HTTP (Axios)
+                                ï¿½ HTTP (Axios)
                                 ?
 +-----------------------------------------------------------------+
-¦                        SERVER (Azure)                           ¦
-¦                      .NET 10 Web API                            ¦
-+-----------------------------------------------------------------¦
-¦  Controllers: UserController | HgsInfoController                ¦
-¦  Endpoints: /api/User | /api/HgsInfo                            ¦
+ï¿½                        SERVER (Azure)                           ï¿½
+ï¿½                      .NET 10 Web API                            ï¿½
++-----------------------------------------------------------------ï¿½
+ï¿½  Controllers: UserController | HgsInfoController                ï¿½
+ï¿½  Endpoints: /api/User | /api/HgsInfo                            ï¿½
 +-----------------------------------------------------------------+
-                                ¦ Entity Framework
+                                ï¿½ Entity Framework
                                 ?
 +-----------------------------------------------------------------+
-¦                       DATABASE (Neon)                           ¦
-¦                    Serverless PostgreSQL                        ¦
+ï¿½                       DATABASE (Neon)                           ï¿½
+ï¿½                    Serverless PostgreSQL                        ï¿½
 +-----------------------------------------------------------------+
 ```
 
@@ -71,18 +71,18 @@ A full-stack web application for managing hostel complaints and grievances with 
 ```
 src/
 +-- components/
-¦   +-- Header/Header.tsx        # Navigation bar
-¦   +-- Login/Login.tsx          # Auth page (Login/Signup)
-¦   +-- Home/Home.tsx            # Dashboard
-¦   +-- HgsTypes/HgsTypes.tsx    # Create grievance form
-¦   +-- GrievanceList/GrievanceList.tsx  # List all grievances
-¦   +-- Edit/Edit.tsx            # Edit grievance form
+ï¿½   +-- Header/Header.tsx        # Navigation bar
+ï¿½   +-- Login/Login.tsx          # Auth page (Login/Signup)
+ï¿½   +-- Home/Home.tsx            # Dashboard
+ï¿½   +-- HgsTypes/HgsTypes.tsx    # Create grievance form
+ï¿½   +-- GrievanceList/GrievanceList.tsx  # List all grievances
+ï¿½   +-- Edit/Edit.tsx            # Edit grievance form
 +-- guards/
-¦   +-- ProtectedRoute.tsx       # Route protection HOC
+ï¿½   +-- ProtectedRoute.tsx       # Route protection HOC
 +-- hooks/
-¦   +-- useAuth.ts               # Authentication hook
+ï¿½   +-- useAuth.ts               # Authentication hook
 +-- models/
-¦   +-- types.ts                 # TypeScript interfaces
+ï¿½   +-- types.ts                 # TypeScript interfaces
 +-- services/
     +-- userService.ts           # User API calls
     +-- typesService.ts          # Grievance API calls
