@@ -9,7 +9,7 @@ import './App.scss';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/HgsReact-2026/">
       <Routes>
         <Route path="/" element={<Login />} />
         <Route 
