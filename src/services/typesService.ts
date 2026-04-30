@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { HgsTypes } from '../models/types';
 
-const API_BASE = 'https://localhost:7289/api';
+const API_BASE = 'https://hgs-dotnet-2026.onrender.com/api';
 
 export const typesService = {
   addGrievance: async (data: HgsTypes): Promise<HgsTypes> => {
