@@ -296,11 +296,14 @@ export const Login: React.FC = () => {
     try {
       const result = await userService.signup(signupData);
       if (result) {
+        setAuthError('Account created successfully');
         login(result);
         navigate('/home');
       }
     } catch (error: any) {
-      setAuthError(error.message || 'Signup failed. Please try again.');
+      const message =
+        error?.response?.data?.message || 'Signup failed. Please try again.';
+      setAuthError(message);
     }
   };
 
