@@ -1,14 +1,7 @@
 import axios from 'axios';
 import { SignUp, Login, AuthResponse, UserRole } from '../models/types';
 
-const API_BASE = 'https://hgs-dotnet-2026.onrender.com/api';
-
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  password: string;
-}
+const API_BASE = 'https://hgs-dotnet-2026.onrender.com/api/User';
 
 // @hgs.com domain wale sab admin
 const getRole = (email: string): UserRole => {
@@ -16,52 +9,49 @@ const getRole = (email: string): UserRole => {
 };
 
 export const userService = {
+
   signup: async (data: SignUp): Promise<AuthResponse> => {
-    // Block admin domain signup
     if (data.email.toLowerCase().endsWith('@hgs.com')) {
       throw new Error('Admin accounts cannot be created via signup. Please contact administrator.');
     }
-    
-    const response = await axios.post<User>(`${API_BASE}/User`, data);
+
+    const response = await axios.post(`${API_BASE}/signup`, data);
+
     return {
       token: 'dummy-token',
       username: response.data.username,
       email: response.data.email,
-      role: 'user' // Always user via signup
+      role: 'user'
     };
   },
 
   login: async (data: Login): Promise<AuthResponse> => {
-    // Get all users and check credentials (demo approach)
-    const response = await axios.get<User[]>(`${API_BASE}/User`);
-    const user = response.data.find(
-      u => u.email === data.email && u.password === data.password
-    );
-    
-    if (user) {
+    try {
+      const response = await axios.post(`${API_BASE}/login`, data);
+
       return {
         token: 'dummy-token',
-        username: user.username,
-        email: user.email,
-        role: getRole(user.email)
+        username: response.data.username,
+        email: response.data.email,
+        role: getRole(response.data.email)
       };
+    } catch (error: any) {
+      throw new Error(
+        error?.response?.data?.message || 'Invalid credentials'
+      );
     }
-    throw new Error('Invalid credentials');
   },
 
   resetPassword: async (email: string, newPassword: string): Promise<void> => {
-    // Get all users and find by email
-    const response = await axios.get<User[]>(`${API_BASE}/User`);
-    const user = response.data.find(u => u.email === email);
-    
-    if (!user) {
-      throw new Error('Email not found');
-    }
-
-    // Update user password
-    await axios.put(`${API_BASE}/User/${user.id}`, {
-      ...user,
-      password: newPassword
+  try {
+    await axios.post(`${API_BASE}/reset-password`, {
+      email,
+      newPassword
     });
+  } catch (error: any) {
+    throw new Error(
+      error?.response?.data?.message || 'Failed to reset password'
+    );
   }
+}
 };
